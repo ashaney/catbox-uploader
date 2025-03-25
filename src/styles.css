@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Custom classes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+/* Glass morphism */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.glass-card {
+  @apply glass-morphism rounded-xl transition-all duration-300;
+}
+
+.glass-card:hover {
+  box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Upload area */
+.upload-area {
+  @apply border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300;
+}
+
+.upload-area:hover {
+  @apply bg-opacity-10 border-primary;
+  transform: scale(1.01);
+}
+
+.upload-area.active {
+  @apply border-primary bg-primary bg-opacity-5;
+  transform: scale(1.02);
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-primary hover:bg-primary-focus text-white font-medium rounded-full transition-all duration-200;
+}
+
+.btn-outline {
+  @apply border border-gray-300 hover:border-primary hover:text-primary bg-white font-medium rounded-full transition-all duration-200;
+}
+
+/* Progress bar */
+.progress-container {
+  @apply w-full bg-gray-200 rounded-full h-2.5 overflow-hidden;
+}
+
+.progress-bar {
+  @apply h-full rounded-full transition-all duration-300 ease-out;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Result and history items */
+.result-item {
+  @apply flex items-center justify-between p-4 rounded-xl bg-white border border-gray-100 shadow-sm transition-all duration-200;
+}
+
+.result-item:hover {
+  @apply shadow-md border-gray-200;
+  transform: translateY(-2px);
+}
+
+.history-item {
+  @apply rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm transition-all duration-200;
+}
+
+.history-item:hover {
+  @apply shadow-md border-gray-200;
+  transform: translateY(-2px);
+}
+
+.history-thumbnail {
+  @apply h-32 bg-gray-100 overflow-hidden;
+}
+
+.history-thumbnail img {
+  @apply w-full h-full object-cover transition-all duration-500;
+}
+
+.history-item:hover .history-thumbnail img {
+  transform: scale(1.05);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-sans tracking-tight;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}

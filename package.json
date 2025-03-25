@@ -1,0 +1,17 @@
+{
+  "name": "catbox-uploader",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch index.ts",
+    "build": "bun build ./src/main.js --outdir ./dist",
+    "start": "bun serve ./dist"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
