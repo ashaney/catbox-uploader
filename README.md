@@ -56,8 +56,13 @@ If you prefer to configure your deployment manually:
 2. Connect your GitHub repository
 3. Use the following settings:
    - Environment: Node
-   - Build Command: `curl -fsSL https://bun.sh/install | bash && ~/.bun/bin/bun install && ~/.bun/bin/bun run build`
-   - Start Command: `~/.bun/bin/bun index.ts`
+   - Build Command: 
+     ```
+     npm install -g bun
+     bun install
+     bun run build
+     ```
+   - Start Command: `bun index.ts`
    - Environment Variables:
      - `PORT`: `10000`
 
