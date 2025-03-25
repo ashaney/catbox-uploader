@@ -1,5 +1,6 @@
 // Constants
-const API_URL = '/proxy/catbox';
+const DIRECT_API_URL = 'https://catbox.moe/user/api.php';
+const PROXY_API_URL = '/proxy/catbox';
 const STORAGE_KEY = 'catbox-uploader-history';
 
 // DOM Elements
@@ -99,29 +100,75 @@ async function uploadFile(file, index, total) {
     // Update progress UI to show which file is being uploaded
     progressPercentage.textContent = `Uploading ${index + 1}/${total}: ${file.name}`;
     
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      body: formData,
-    });
+    console.log(`Attempting to upload file: ${file.name} (${file.size} bytes)`);
     
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // Try direct API first
+    try {
+      console.log('Trying direct API...');
+      const directResponse = await fetch(DIRECT_API_URL, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      console.log(`Direct API response status: ${directResponse.status}`);
+      
+      if (directResponse.ok) {
+        const url = await directResponse.text();
+        console.log(`Direct API response text: ${url}`);
+        
+        // Check if the response is an error message from catbox
+        if (url.includes('error') || url.includes('Error')) {
+          throw new Error(url);
+        }
+        
+        return {
+          name: file.name,
+          url: url.trim(),
+          type: file.type,
+          size: file.size,
+          date: new Date().toISOString()
+        };
+      }
+      
+      // If direct API fails, throw an error to trigger the proxy fallback
+      throw new Error(`Direct API failed with status: ${directResponse.status}`);
+    } catch (directError) {
+      console.log(`Direct API error: ${directError.message}. Falling back to proxy...`);
+      
+      // Create a new FormData object for the proxy request
+      // This is necessary because the original FormData might have been consumed
+      const proxyFormData = new FormData();
+      proxyFormData.append('reqtype', 'fileupload');
+      proxyFormData.append('fileToUpload', file);
+      
+      // Try proxy API as fallback
+      const proxyResponse = await fetch(PROXY_API_URL, {
+        method: 'POST',
+        body: proxyFormData,
+      });
+      
+      console.log(`Proxy API response status: ${proxyResponse.status}`);
+      
+      if (!proxyResponse.ok) {
+        throw new Error(`HTTP error! status: ${proxyResponse.status}`);
+      }
+      
+      const url = await proxyResponse.text();
+      console.log(`Proxy API response text: ${url}`);
+      
+      // Check if the response is an error message from catbox
+      if (url.includes('error') || url.includes('Error')) {
+        throw new Error(url);
+      }
+      
+      return {
+        name: file.name,
+        url: url.trim(),
+        type: file.type,
+        size: file.size,
+        date: new Date().toISOString()
+      };
     }
-    
-    const url = await response.text();
-    
-    // Check if the response is an error message from catbox
-    if (url.includes('error') || url.includes('Error')) {
-      throw new Error(url);
-    }
-    
-    return {
-      name: file.name,
-      url: url.trim(),
-      type: file.type,
-      size: file.size,
-      date: new Date().toISOString()
-    };
   } catch (error) {
     console.error('Upload error:', error);
     alert(`Failed to upload ${file.name}: ${error.message}`);
