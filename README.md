@@ -2,7 +2,7 @@
 
 A modern, minimalist file uploader for [catbox.moe](https://catbox.moe) with an elegant user interface.
 
-![Catbox Uploader Screenshot](https://i.imgur.com/example.png)
+![Catbox Uploader Screenshot](https://i.imgur.com/MuLIuFZ.jpeg)
 
 ## Features
 
